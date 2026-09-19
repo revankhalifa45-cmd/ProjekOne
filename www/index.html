@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07101f">
+<meta name="description" content="Calculator Day by Riann - personal finance dashboard">
+<title>Calculator Day by Riann</title>
+<style>
+:root{
+  --bg:#050816;--panel:#0b1224;--panel2:#101a31;--text:#f5f7ff;--muted:#8994ad;
+  --line:rgba(255,255,255,.09);--accent:#62e7ff;--accent2:#7c5cff;--good:#37e58c;--bad:#ff5f7a;
+  --warn:#ffc857;--shadow:0 20px 60px rgba(0,0,0,.35);--r:22px;
+}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+body:before{content:"";position:fixed;inset:0;z-index:-4;background:
+radial-gradient(circle at 15% 20%,rgba(98,231,255,.12),transparent 26%),
+radial-gradient(circle at 80% 15%,rgba(124,92,255,.14),transparent 30%),
+radial-gradient(circle at 55% 90%,rgba(0,170,255,.08),transparent 25%),#050816}
+.stars,.stars:before,.stars:after{position:fixed;inset:0;content:"";z-index:-3;background-image:
+radial-gradient(#fff 1px,transparent 1px);background-size:120px 120px;opacity:.25;animation:drift 25s linear infinite}
+.stars:before{background-size:210px 210px;opacity:.18;animation-duration:38s}.stars:after{background-size:330px 330px;opacity:.12;animation-duration:55s}
+@keyframes drift{to{transform:translate3d(40px,80px,0)}} 
+.lightning{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}.bolt{position:absolute;width:3px;height:45vh;background:linear-gradient(transparent,#62e7ff,transparent);filter:drop-shadow(0 0 12px #62e7ff);opacity:0;transform:skewX(-25deg) rotate(15deg);animation:flash 8s infinite}
+.b1{right:15%;top:-8%;animation-delay:1s}.b2{left:18%;top:5%;animation-delay:4.3s}.b3{right:42%;top:-12%;animation-delay:6.2s}
+@keyframes flash{0%,90%,100%{opacity:0}92%{opacity:.85}94%{opacity:.15}96%{opacity:.65}}
+.hidden{display:none!important}.screen{min-height:100vh}.center{display:grid;place-items:center}.glass{background:linear-gradient(145deg,rgba(18,28,52,.88),rgba(7,12,27,.82));border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+#splash{position:fixed;inset:0;z-index:50;background:#050816;display:grid;place-items:center;transition:.5s}
+.logo{width:88px;height:88px;border-radius:26px;background:linear-gradient(145deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#06101e;font-size:38px;font-weight:1000;box-shadow:0 0 60px rgba(98,231,255,.35)}
+.splash-title{margin-top:18px;text-align:center;font-size:25px;font-weight:900}.splash-sub{color:var(--muted);text-align:center;margin-top:6px}
+.auth{width:min(430px,92vw);padding:28px;border-radius:28px}.brand{display:flex;gap:12px;align-items:center;margin-bottom:24px}.brand .mini{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#06101e;font-weight:1000}
+h1,h2,h3,p{margin-top:0}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}
+.tabs{display:flex;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:18px}.tabs button{flex:1;background:transparent;color:var(--muted);border:0;padding:10px;border-radius:11px}.tabs button.active{background:rgba(98,231,255,.12);color:var(--text)}
+.field{margin:12px 0}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 7px 3px}.field input,.field select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line);outline:none;background:#080f20;color:var(--text)}.field input:focus,.field select:focus{border-color:rgba(98,231,255,.55);box-shadow:0 0 0 3px rgba(98,231,255,.08)}
+.btn{border:1px solid var(--line);background:#111b33;color:var(--text);padding:12px 15px;border-radius:14px;font-weight:800}.btn.primary{background:linear-gradient(135deg,#54def7,#7461ff);border:0;color:#06101e}.btn.good{background:rgba(55,229,140,.12);border-color:rgba(55,229,140,.3)}.btn.danger{background:rgba(255,95,122,.1);border-color:rgba(255,95,122,.3)}.btn.wide{width:100%}
+#app{display:none;min-height:100vh}.top{position:sticky;top:0;z-index:20;background:rgba(5,8,22,.7);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.topin{max-width:1250px;margin:auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brandtext{font-weight:950;letter-spacing:-.4px}.top-actions{display:flex;gap:8px}.iconbtn{width:42px;height:42px;border-radius:13px;border:1px solid var(--line);background:#0c152a;color:var(--text)}
+.layout{max-width:1250px;margin:auto;padding:18px;display:grid;grid-template-columns:230px 1fr;gap:18px}.side{position:sticky;top:82px;height:calc(100vh - 100px);padding:12px;border-radius:22px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:var(--muted);padding:12px;border-radius:13px;text-align:left;font-weight:800}.nav button.active,.nav button:hover{background:rgba(98,231,255,.1);color:var(--text)}.main{min-width:0}.page{display:none}.page.active{display:block}.hero{padding:22px;border-radius:26px;display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:16px}.hero .balance{font-size:clamp(28px,5vw,46px);font-weight:1000;letter-spacing:-1.5px}.badge{padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;background:rgba(55,229,140,.12);color:var(--good);display:inline-block}.badge.bad{background:rgba(255,95,122,.12);color:var(--bad)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{padding:18px;border-radius:20px}.metric .label{font-size:12px;color:var(--muted)}.metric .value{font-size:22px;font-weight:950;margin-top:7px}.green{color:var(--good)}.red{color:var(--bad)}.cyan{color:var(--accent)}.purple{color:#a997ff}
+.section{margin-top:16px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.section-head h2{font-size:18px;margin:0}
+.two{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}.list{display:grid;gap:9px}.tx{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid var(--line)}.txleft{display:flex;gap:11px;align-items:center;min-width:0}.txicon{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:rgba(98,231,255,.1)}.txname{font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.txmeta{font-size:11px;color:var(--muted);margin-top:3px}.txamt{font-weight:950;white-space:nowrap}.income{color:var(--good)}.expense{color:var(--bad)}
+.chart{height:220px;position:relative}.chart canvas{width:100%;height:100%}.bars{display:grid;gap:11px}.barrow{display:grid;grid-template-columns:100px 1fr 70px;align-items:center;gap:10px;font-size:12px}.bar{height:10px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap}.searchrow{display:flex;gap:8px}.searchrow input{flex:1}
+.bottom{display:none}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:40;display:grid;place-items:center;padding:16px}.modalbox{width:min(520px,100%);max-height:90vh;overflow:auto;padding:20px;border-radius:24px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#101a31;border:1px solid var(--line);padding:12px 16px;border-radius:14px;opacity:0;pointer-events:none;z-index:80;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%)}
+.kpi{display:flex;justify-content:space-between;gap:12px;align-items:center}.progress{height:10px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:none}.grid{grid-template-columns:repeat(2,1fr)}.bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:10px;right:10px;bottom:10px;z-index:25;padding:6px;border-radius:19px}.bottom button{background:transparent;border:0;color:var(--muted);padding:9px 2px;font-size:10px}.bottom button.active{color:var(--accent)}.main{padding-bottom:85px}.two{grid-template-columns:1fr}}
+@media(max-width:560px){.hero{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.barrow{grid-template-columns:80px 1fr 55px}.topin{padding:11px 12px}.layout{padding:12px}.card{padding:15px}.auth{padding:22px}}
+</style>
+</head>
+<body>
+<div class="stars"></div><div class="lightning"><i class="bolt b1"></i><i class="bolt b2"></i><i class="bolt b3"></i></div>
+<div id="splash"><div><div class="logo">⚡</div><div class="splash-title">Calculator Day by Riann</div><div class="splash-sub">Smart money. Clear decisions.</div></div></div>
+
+<section id="auth" class="screen center hidden">
+  <div class="auth glass">
+    <div class="brand"><div class="mini">⚡</div><div><b>Calculator Day</b><div class="small">by Riann</div></div></div>
+    <div class="tabs"><button id="tabLogin" class="active" onclick="showAuth('login')">Login</button><button id="tabReg" onclick="showAuth('register')">Register</button></div>
+    <div id="loginForm">
+      <div class="field"><label>USERNAME / EMAIL</label><input id="loginUser" autocomplete="username" placeholder="contoh: rian"></div>
+      <div class="field"><label>PASSWORD</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+      <button class="btn primary wide" onclick="login()">Masuk ke dashboard</button>
+      <button class="btn wide" style="margin-top:8px" onclick="bioUnlock()">🔐 Login biometrik</button>
+    </div>
+    <div id="regForm" class="hidden">
+      <div class="field"><label>NAMA</label><input id="regName" placeholder="Nama kamu"></div>
+      <div class="field"><label>USERNAME</label><input id="regUser" autocomplete="username" placeholder="username"></div>
+      <div class="field"><label>PASSWORD</label><input id="regPass" type="password" autocomplete="new-password" placeholder="minimal 4 karakter"></div>
+      <button class="btn primary wide" onclick="register()">Buat akun</button>
+    </div>
+    <p class="small" style="margin:16px 0 0">Data demo disimpan lokal di perangkat. Untuk aplikasi produksi, gunakan backend + penyimpanan aman.</p>
+  </div>
+</section>
+
+<div id="app">
+<header class="top"><div class="topin">
+  <div class="brand"><div class="mini">⚡</div><div><div class="brandtext">Calculator Day</div><div class="small">by Riann • <span id="hello">Welcome</span></div></div></div>
+  <div class="top-actions"><button class="iconbtn" onclick="openModal('txModal')">＋</button><button class="iconbtn" onclick="showPage('settings')">⚙</button></div>
+</div></header>
+<div class="layout">
+<aside class="side glass"><div class="nav" id="sideNav">
+<button data-page="dashboard" class="active">⌂ Dashboard</button><button data-page="transactions">↕ Transactions</button><button data-page="analytics">◔ Analytics</button><button data-page="budget">▣ Budget</button><button data-page="goals">◇ Savings Goals</button><button data-page="calendar">◫ Calendar</button><button data-page="profile">♙ Profile</button><button data-page="settings">⚙ Settings</button>
+</div></aside>
+<main class="main">
+<section id="dashboard" class="page active">
+<div class="hero glass"><div><div class="small">TOTAL BALANCE</div><div class="balance" id="balance">Rp 0</div><div id="healthBadge" class="badge">Healthy</div></div><button class="btn primary" onclick="openModal('txModal')">＋ Add transaction</button></div>
+<div class="grid">
+<div class="card glass metric"><div class="label">INCOME</div><div class="value green" id="income">Rp 0</div></div>
+<div class="card glass metric"><div class="label">EXPENSE</div><div class="value red" id="expense">Rp 0</div></div>
+<div class="card glass metric"><div class="label">PROFIT / LOSS</div><div class="value cyan" id="profit">Rp 0</div></div>
+<div class="card glass metric"><div class="label">SAVINGS RATE</div><div class="value purple" id="savingRate">0%</div></div>
+</div>
+<div class="section two">
+<div class="card glass"><div class="section-head"><h2>Cashflow 7 days</h2><span class="small">live</span></div><div class="chart"><canvas id="cashChart"></canvas></div></div>
+<div class="card glass"><div class="section-head"><h2>Financial health</h2></div><div class="kpi"><span class="muted">Budget usage</span><b id="budgetUse">0%</b></div><div class="progress" style="margin:10px 0 15px"><i id="budgetBar" style="width:0%"></i></div><div class="kpi"><span class="muted">Expense / income</span><b id="expenseRatio">0%</b></div><div class="kpi" style="margin-top:12px"><span class="muted">Transactions</span><b id="txCount">0</b></div><p id="analysisText" class="small" style="margin-top:15px"></p></div>
+</div>
+<div class="section two"><div class="card glass"><div class="section-head"><h2>Recent activity</h2><button class="btn" onclick="showPage('transactions')">See all</button></div><div id="recent" class="list"></div></div>
+<div class="card glass"><div class="section-head"><h2>Top expenses</h2></div><div id="topCats" class="bars"></div></div></div>
+</section>
+
+<section id="transactions" class="page">
+<div class="section-head"><div><h1>Transactions</h1><p class="muted">Income, expense, transfer, debt & recurring.</p></div><button class="btn primary" onclick="openModal('txModal')">＋ Add</button></div>
+<div class="card glass"><div class="searchrow"><input id="search" placeholder="Cari transaksi..." oninput="renderTransactions()"><select id="filterType" onchange="renderTransactions()"><option value="all">All</option><option value="income">Income</option><option value="expense">Expense</option></select></div><div id="txList" class="list" style="margin-top:12px"></div></div>
+</section>
+
+<section id="analytics" class="page">
+<div class="section-head"><div><h1>Analytics</h1><p class="muted">Analisis pemasukan, pengeluaran dan profit.</p></div><button class="btn" onclick="exportCSV()">Export CSV</button></div>
+<div class="grid"><div class="card glass metric"><div class="label">AVG EXPENSE</div><div class="value red" id="avgExpense">Rp 0</div></div><div class="card glass metric"><div class="label">AVG INCOME</div><div class="value green" id="avgIncome">Rp 0</div></div><div class="card glass metric"><div class="label">BIGGEST EXPENSE</div><div class="value" id="maxExpense">Rp 0</div></div><div class="card glass metric"><div class="label">PROFIT MARGIN</div><div class="value cyan" id="margin">0%</div></div></div>
+<div class="section two"><div class="card glass"><h2>Expense categories</h2><div id="catBars" class="bars"></div></div><div class="card glass"><h2>Decision engine</h2><div id="insights" class="list"></div></div></div>
+</section>
+
+<section id="budget" class="page">
+<div class="section-head"><div><h1>Budget</h1><p class="muted">Set target pengeluaran bulanan.</p></div><button class="btn primary" onclick="setBudget()">Set budget</button></div>
+<div class="card glass"><div class="kpi"><span>Monthly budget</span><b id="budgetAmount">Rp 0</b></div><div class="progress" style="margin:12px 0"><i id="budgetProgress" style="width:0%"></i></div><div class="kpi"><span class="muted">This month</span><b id="monthSpend">Rp 0</b></div><p id="budgetMessage" class="small" style="margin-top:12px"></p></div>
+</section>
+
+<section id="goals" class="page">
+<div class="section-head"><div><h1>Savings Goals</h1><p class="muted">Buat target tabungan dan pantau progress.</p></div><button class="btn primary" onclick="addGoal()">＋ Goal</button></div>
+<div id="goalList" class="grid"></div>
+</section>
+
+<section id="calendar" class="page">
+<div class="section-head"><div><h1>Calendar</h1><p class="muted">Ringkasan transaksi per tanggal.</p></div></div>
+<div class="card glass"><input id="calMonth" type="month" onchange="renderCalendar()"><div id="calendarGrid" class="grid" style="margin-top:12px"></div></div>
+</section>
+
+<section id="profile" class="page">
+<div class="section-head"><div><h1>Profile</h1><p class="muted">Akun dan preferensi.</p></div></div>
+<div class="card glass formgrid"><div class="field"><label>NAMA</label><input id="profileName"></div><div class="field"><label>USERNAME</label><input id="profileUser" disabled></div><div class="field"><label>CURRENCY</label><select id="currency"><option>IDR</option><option>USD</option><option>SGD</option><option>MYR</option></select></div><div class="field"><label>LANGUAGE</label><select><option>Indonesia</option><option>English</option></select></div></div>
+<div class="actions" style="margin-top:12px"><button class="btn primary" onclick="saveProfile()">Save profile</button><button class="btn" onclick="bioEnroll()">🔐 Enable biometrics</button></div>
+</section>
+
+<section id="settings" class="page">
+<div class="section-head"><div><h1>Settings</h1><p class="muted">Backup, restore, security.</p></div></div>
+<div class="card glass">
+<div class="actions"><button class="btn" onclick="exportJSON()">Export JSON</button><button class="btn" onclick="document.getElementById('importFile').click()">Import JSON</button><input id="importFile" type="file" accept=".json" hidden onchange="importJSON(event)"><button class="btn danger" onclick="resetData()">Reset transactions</button><button class="btn danger" onclick="logout()">Logout</button></div>
+<div style="margin-top:16px"><h3>Security</h3><p class="small">Biometric unlock memakai API biometrik native saat aplikasi dijalankan sebagai Android/iOS melalui Capacitor. Di browser/Acode, tombol akan memakai fallback yang tersedia.</p></div>
+</div>
+</section>
+</main></div>
+<nav class="bottom glass" id="bottomNav"><button data-page="dashboard" class="active">⌂<br>Home</button><button data-page="transactions">↕<br>Tx</button><button data-page="analytics">◔<br>Stats</button><button data-page="goals">◇<br>Goals</button><button data-page="profile">♙<br>Profile</button></nav>
+</div>
+
+<div id="txModal" class="modal hidden" onclick="if(event.target===this)closeModal('txModal')"><div class="modalbox glass"><div class="section-head"><h2>Add transaction</h2><button class="iconbtn" onclick="closeModal('txModal')">×</button></div>
+<div class="tabs"><button id="incomeTab" class="active" onclick="setTxType('income')">Income</button><button id="expenseTab" onclick="setTxType('expense')">Expense</button></div>
+<div class="formgrid"><div class="field"><label>AMOUNT</label><input id="txAmount" type="number" min="0" placeholder="50000"></div><div class="field"><label>CATEGORY</label><select id="txCat"><option>Salary</option><option>Food</option><option>Transport</option><option>Shopping</option><option>School</option><option>Entertainment</option><option>Bills</option><option>Health</option><option>Other</option></select></div></div>
+<div class="field"><label>NOTE</label><input id="txNote" placeholder="Contoh: uang saku"></div><div class="field"><label>DATE</label><input id="txDate" type="date"></div><button class="btn primary wide" onclick="addTransaction()">Save transaction</button></div></div>
+
+<div id="goalModal" class="modal hidden"><div class="modalbox glass"><div class="section-head"><h2>New savings goal</h2><button class="iconbtn" onclick="closeModal('goalModal')">×</button></div><div class="field"><label>NAME</label><input id="goalName" placeholder="Laptop"></div><div class="formgrid"><div class="field"><label>TARGET</label><input id="goalTarget" type="number" placeholder="5000000"></div><div class="field"><label>SAVED</label><input id="goalSaved" type="number" placeholder="0"></div></div><button class="btn primary wide" onclick="saveGoal()">Create goal</button></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY='cdr_v2';
+let state={user:null,transactions:[],budget:0,goals:[],currency:'IDR',biometric:false};
+let txType='income';
+const fmt=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:state.currency||'IDR',maximumFractionDigits:0}).format(Number(n)||0);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)state={...state,...x}}catch{}}
+function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function showAuth(mode){document.getElementById('loginForm').classList.toggle('hidden',mode!=='login');document.getElementById('regForm').classList.toggle('hidden',mode!=='register');document.getElementById('tabLogin').classList.toggle('active',mode==='login');document.getElementById('tabReg').classList.toggle('active',mode==='register')}
+function register(){const name=regName.value.trim(),user=regUser.value.trim(),pass=regPass.value;if(!name||!user||pass.length<4)return toast('Isi data dengan benar');state.user={name,user,pass};save();toast('Akun dibuat, silakan login');showAuth('login');loginUser.value=user}
+function login(){if(!state.user)return toast('Belum ada akun, pilih Register');if(loginUser.value.trim()!==state.user.user||loginPass.value!==state.user.pass)return toast('Username/password salah');enterApp()}
+function enterApp(){auth.classList.add('hidden');app.style.display='block';hello.textContent=state.user?.name||'User';profileName.value=state.user?.name||'';profileUser.value=state.user?.user||'';currency.value=state.currency||'IDR';if(!txDate.value)txDate.value=new Date().toISOString().slice(0,10);renderAll()}
+function logout(){app.style.display='none';auth.classList.remove('hidden');showAuth('login')}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='analytics')renderAnalytics();if(p==='calendar')renderCalendar();if(p==='goals')renderGoals()}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function setTxType(t){txType=t;incomeTab.classList.toggle('active',t==='income');expenseTab.classList.toggle('active',t==='expense')}
+function addTransaction(){const amount=Number(txAmount.value);if(!amount)return toast('Masukkan nominal');state.transactions.unshift({id:crypto.randomUUID?.()||Date.now(),type:txType,amount,cat:txCat.value,note:txNote.value||txCat.value,date:txDate.value||new Date().toISOString().slice(0,10)});save();txAmount.value='';txNote.value='';closeModal('txModal');renderAll();toast('Transaksi tersimpan')}
+function totals(){let income=0,expense=0;state.transactions.forEach(t=>t.type==='income'?income+=+t.amount:expense+=+t.amount);return {income,expense,profit:income-expense}}
+function monthExpense(){const m=new Date().toISOString().slice(0,7);return state.transactions.filter(t=>t.type==='expense'&&t.date?.startsWith(m)).reduce((a,t)=>a+ +t.amount,0)}
+function renderAll(){const t=totals(),bal=t.profit;balance.textContent=fmt(bal);income.textContent=fmt(t.income);expense.textContent=fmt(t.expense);profit.textContent=fmt(t.profit);profit.className='value '+(t.profit>=0?'cyan':'red');savingRate.textContent=(t.income?Math.max(0,(t.profit/t.income)*100):0).toFixed(0)+'%';const ratio=t.income? t.expense/t.income*100:0;expenseRatio.textContent=ratio.toFixed(0)+'%';txCount.textContent=state.transactions.length;const bu=state.budget?monthExpense()/state.budget*100:0;budgetUse.textContent=Math.round(bu)+'%';budgetBar.style.width=Math.min(100,bu)+'%';healthBadge.textContent=t.profit>=0?'Healthy':'Attention';healthBadge.classList.toggle('bad',t.profit<0);analysisText.textContent=t.income===0?'Tambahkan pemasukan untuk memulai analisis.':t.profit>=0?`Kondisi saat ini untung ${fmt(t.profit)}. Jaga pengeluaran agar rasio tetap terkendali.`:`Saat ini rugi ${fmt(Math.abs(t.profit))}. Prioritaskan mengurangi kategori pengeluaran terbesar.`;renderRecent();renderTopCats();renderChart();renderTransactions();renderAnalytics();renderGoals();budgetAmount.textContent=fmt(state.budget);monthSpend.textContent=fmt(monthExpense());const bp=state.budget?monthExpense()/state.budget*100:0;budgetProgress.style.width=Math.min(100,bp)+'%';budgetMessage.textContent=state.budget?(bp>=100?'Budget sudah terlewati.':`Sisa budget sekitar ${fmt(Math.max(0,state.budget-monthExpense()))}.`):'Belum ada budget bulanan.'}
+function txHtml(t){return `<div class="tx"><div class="txleft"><div class="txicon">${t.type==='income'?'↗':'↘'}</div><div style="min-width:0"><div class="txname">${esc(t.note||t.cat)}</div><div class="txmeta">${esc(t.cat)} • ${esc(t.date)}</div></div></div><div class="txamt ${t.type}">${t.type==='income'?'+':'−'} ${fmt(t.amount)} <button class="iconbtn" style="width:32px;height:32px;margin-left:5px" onclick="delTx('${t.id}')">×</button></div></div>`}
+function renderRecent(){recent.innerHTML=state.transactions.slice(0,5).map(txHtml).join('')||'<p class="muted">Belum ada transaksi.</p>'}
+function renderTransactions(){const q=(search?.value||'').toLowerCase(),f=filterType?.value||'all';const arr=state.transactions.filter(t=>(f==='all'||t.type===f)&&(`${t.note} ${t.cat} ${t.date}`.toLowerCase().includes(q)));txList.innerHTML=arr.map(txHtml).join('')||'<p class="muted">Tidak ada data.</p>'}
+function delTx(id){state.transactions=state.transactions.filter(t=>t.id!==id);save();renderAll();toast('Transaksi dihapus')}
+function categoryTotals(){const o={};state.transactions.filter(t=>t.type==='expense').forEach(t=>o[t.cat]=(o[t.cat]||0)+ +t.amount);return Object.entries(o).sort((a,b)=>b[1]-a[1])}
+function renderTopCats(){const a=categoryTotals().slice(0,5),max=a[0]?.[1]||1;topCats.innerHTML=a.map(([k,v])=>`<div class="barrow"><span>${esc(k)}</span><div class="bar"><i style="width:${v/max*100}%"></i></div><b>${fmt(v)}</b></div>`).join('')||'<p class="muted">Belum ada expense.</p>'}
+function renderAnalytics(){const t=totals(),ex=state.transactions.filter(x=>x.type==='expense'),inc=state.transactions.filter(x=>x.type==='income');avgExpense.textContent=fmt(ex.length?t.expense/ex.length:0);avgIncome.textContent=fmt(inc.length?t.income/inc.length:0);maxExpense.textContent=fmt(Math.max(0,...ex.map(x=>+x.amount)));margin.textContent=(t.income?(t.profit/t.income*100):0).toFixed(1)+'%';const cats=categoryTotals(),max=cats[0]?.[1]||1;catBars.innerHTML=cats.map(([k,v])=>`<div class="barrow"><span>${esc(k)}</span><div class="bar"><i style="width:${v/max*100}%"></i></div><b>${fmt(v)}</b></div>`).join('')||'<p class="muted">No data</p>';const ins=[];if(t.income===0)ins.push('Tambahkan pemasukan agar analisis margin aktif.');else{if(t.expense/t.income>.7)ins.push('Pengeluaran sudah di atas 70% pemasukan. Pertimbangkan batas belanja mingguan.');if(t.profit>0)ins.push('Cashflow positif. Sebagian profit bisa dialihkan ke savings goal.');if(t.profit<0)ins.push('Cashflow negatif. Cek kategori terbesar dan kurangi pengeluaran non-prioritas.');if(t.expense/t.income<=.5)ins.push('Rasio pengeluaran relatif rendah dibanding pemasukan.')}insights.innerHTML=ins.map(x=>`<div class="tx"><div>✦</div><div class="small">${esc(x)}</div></div>`).join('')}
+function renderChart(){const c=document.getElementById('cashChart'),ctx=c.getContext('2d'),w=c.clientWidth*devicePixelRatio,h=c.clientHeight*devicePixelRatio;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10))}const vals=days.map(d=>state.transactions.filter(t=>t.date===d).reduce((s,t)=>s+(t.type==='income'?1:-1)*+t.amount,0));const max=Math.max(1,...vals.map(Math.abs));ctx.strokeStyle='rgba(255,255,255,.08)';for(let i=1;i<4;i++){const y=h-i*h/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}ctx.beginPath();vals.forEach((v,i)=>{const x=i*(w/(vals.length-1)),y=h/2-(v/max)*(h*.38);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.strokeStyle='#62e7ff';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#8994ad';ctx.font=`${11*devicePixelRatio}px sans-serif`;vals.forEach((v,i)=>ctx.fillText(days[i].slice(5),i*(w/6)-10,h-8*devicePixelRatio))}
+function setBudget(){const n=prompt('Budget bulanan (nominal):',state.budget||'');if(n!==null){state.budget=Number(n)||0;save();renderAll();toast('Budget diperbarui')}}
+function addGoal(){openModal('goalModal')}
+function saveGoal(){const name=goalName.value.trim(),target=Number(goalTarget.value),saved=Number(goalSaved.value)||0;if(!name||!target)return toast('Lengkapi goal');state.goals.push({id:Date.now(),name,target,saved});save();closeModal('goalModal');renderGoals();toast('Goal dibuat')}
+function renderGoals(){goalList.innerHTML=state.goals.map(g=>{const p=Math.min(100,g.saved/g.target*100);return `<div class="card glass"><div class="kpi"><b>${esc(g.name)}</b><span class="small">${p.toFixed(0)}%</span></div><div class="progress" style="margin:12px 0"><i style="width:${p}%"></i></div><div class="kpi"><span class="small">${fmt(g.saved)}</span><span class="small">${fmt(g.target)}</span></div><div class="actions" style="margin-top:12px"><button class="btn" onclick="addToGoal(${g.id})">＋ Add</button><button class="btn danger" onclick="delGoal(${g.id})">Delete</button></div></div>`}).join('')||'<div class="card glass"><p class="muted">Belum ada savings goal.</p></div>'}
+function addToGoal(id){const n=Number(prompt('Tambahkan tabungan:',0));if(n>0){const g=state.goals.find(x=>x.id===id);g.saved+=n;save();renderGoals();toast('Progress goal diperbarui')}}
+function delGoal(id){state.goals=state.goals.filter(x=>x.id!==id);save();renderGoals()}
+function renderCalendar(){const m=calMonth.value||new Date().toISOString().slice(0,7);calMonth.value=m;const [y,mo]=m.split('-').map(Number),days=new Date(y,mo,0).getDate();calendarGrid.innerHTML=Array.from({length:days},(_,i)=>{const d=`${m}-${String(i+1).padStart(2,'0')}`,arr=state.transactions.filter(t=>t.date===d),net=arr.reduce((s,t)=>s+(t.type==='income'?1:-1)*+t.amount,0);return `<div class="card glass"><b>${i+1}</b><div class="small">${arr.length} tx</div><div class="${net>=0?'green':'red'}" style="margin-top:6px;font-weight:900">${fmt(net)}</div></div>`}).join('')}
+function saveProfile(){state.user.name=profileName.value.trim()||state.user.name;state.currency=currency.value;save();hello.textContent=state.user.name;renderAll();toast('Profile disimpan')}
+function exportJSON(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});downloadBlob(blob,'calculator-day-backup.json')}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state={...state,...JSON.parse(r.result)};save();renderAll();toast('Backup berhasil diimport')}catch{toast('File JSON tidak valid')}};r.readAsText(f)}
+function exportCSV(){const rows=[['date','type','category','note','amount'],...state.transactions.map(t=>[t.date,t.type,t.cat,t.note,t.amount])];downloadBlob(new Blob([rows.map(r=>r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(',')).join('\\n')],{type:'text/csv'}),'transactions.csv')}
+function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function resetData(){if(confirm('Hapus semua transaksi?')){state.transactions=[];save();renderAll();toast('Transaksi direset')}}
+function openModal(id){document.getElementById(id).classList.remove('hidden')}
+function closeModal(id){document.getElementById(id).classList.add('hidden')}
+async function bioUnlock(){
+  try{
+    if(window.Capacitor?.isNativePlatform?.()){
+      const {BiometricAuth}=await import('@aparajita/capacitor-biometric-auth');
+      const info=await BiometricAuth.checkBiometry();
+      if(!info.isAvailable)return toast('Biometrik belum tersedia/enrolled');
+      await BiometricAuth.authenticate({reason:'Unlock Calculator Day',androidTitle:'Calculator Day',androidSubtitle:'Konfirmasi identitas kamu',allowDeviceCredential:true});
+      if(state.user)enterApp(); else toast('Buat akun dulu');
+    }else{
+      toast('Biometrik native aktif saat APK terpasang. Di browser gunakan login biasa.');
+    }
+  }catch(e){toast('Autentikasi dibatalkan/gagal')}
+}
+async function bioEnroll(){state.biometric=true;save();toast('Preferensi biometrik disimpan. APK akan memakai biometric prompt native.')}
+load();
+setTimeout(()=>{splash.style.opacity='0';setTimeout(()=>{splash.remove();if(state.user){auth.classList.remove('hidden')}else{auth.classList.remove('hidden')}},500)},1100);
+window.addEventListener('resize',renderChart);
+</script>
+</body>
+</html>
